@@ -1,8 +1,9 @@
+
 var express=require("express");
 var bodyParser=require("body-parser");
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/new');
+mongoose.connect('mongodb://localhost:27017/coffee');
 var db=mongoose.connection;
 db.on('error', console.log.bind(console, "connection error"));
 db.once('open', function(callback){
@@ -10,7 +11,6 @@ db.once('open', function(callback){
 })
 
 var app=express()
-
 
 
 app.use(bodyParser.json());
@@ -22,14 +22,13 @@ app.use(bodyParser.urlencoded({
 app.post('/sign_up', function(req,res){
 	var name = req.body.name;
 	var email =req.body.email;
-	var pass = req.body.password;
-	var phone =req.body.phone;
-
+	var msg = req.body.msg;
+	
 	var data = {
 		"name": name,
 		"email":email,
-		"password":pass,
-		"phone":phone
+		"msg":msg,
+	
 	}
 db.collection('details').insertOne(data,function(err, collection){
 		if (err) throw err;
@@ -37,7 +36,7 @@ db.collection('details').insertOne(data,function(err, collection){
 			
 	});
 		
-	return res.redirect('signup_success.html');
+	return res.redirect('index.html');
 })
 
 
@@ -45,8 +44,8 @@ app.get('/',function(req,res){
 res.set({
 	'Access-control-Allow-Origin': '*'
 	});
-return res.redirect('index.html');
-}).listen(3000)
+return res.redirect('contact.html');
+}).listen(8000)
 
 
 console.log("server listening at port 3000");
